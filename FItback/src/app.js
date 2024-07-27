@@ -1,7 +1,8 @@
-//this file use express middlewares 
+//this file use express middlewares
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import userRouter from "./routes/user.route.js";
 const app = express();
 app.use(
   cors({
@@ -15,4 +16,6 @@ app.use(express.urlencoded({ extended: true, limit: "16kb" })); // extended mean
 app.use(express.static("public")); // static -- some time we store file folders and asset store in public
 app.use(cookieParser()); // To acess and set the user server cookies.
 //routes import
+
+app.use("/api/v1/users", userRouter);
 export { app };
