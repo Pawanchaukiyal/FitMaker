@@ -1,11 +1,10 @@
 import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/ApiErrors.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
-import { asyncHandler } from "../utils/asyncHandler.js";
+import { asyncHandler } from "../utils/AsyncHandler.js";
+import jwt from "jsonwebtoken";
 
-// import jwt from "jsonwebtoken";
-
-//generate acces om referes token
+//generate acces and refresh token which identify the user
 const generateAccessAndRefereshTokens = async (userId) => {
   try {
     const user = await User.findById(userId);
@@ -22,7 +21,7 @@ const generateAccessAndRefereshTokens = async (userId) => {
   }
 };
 
-//user registration api
+//user registration endpoint
 const registerUser = asyncHandler(async (req, res) => {
   const { fullName, email, username, password, gender, age } = req.body;
   //check field is empty or not
@@ -63,15 +62,8 @@ const registerUser = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, createdUser, "User registered successfully"));
 });
 
-//user login api
+//user login apiendpoint
 const loginUser = asyncHandler(async (req, res) => {
-  // req body -> data
-  // username or email
-  //find the user
-  //password check
-  //access and referesh token
-  //send cookie
-
   const { email, username, password } = req.body;
   console.log(email);
 
@@ -123,7 +115,7 @@ const loginUser = asyncHandler(async (req, res) => {
     );
 });
 
-///
+//logout endpoint
 const logoutUser = asyncHandler(async (req, res) => {
   await User.findByIdAndUpdate(
     req.user._id,
@@ -149,7 +141,7 @@ const logoutUser = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "User logged Out"));
 });
 
-//refreesh token
+//refresh token
 const refreshAccessToken = asyncHandler(async (req, res) => {
   const incomingRefreshToken =
     req.cookies.refreshToken || req.body.refreshToken;
@@ -198,10 +190,10 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
   }
 });
 
+// change current password
 const changeCurrentPassword = asyncHandler(async (req, res) => {
   const { oldPassword, newPassword } = req.body;
   
-
 //   const user = await User.findById(req.user?._id);
 const user = await User.findById(req.user._id);
   // Handle case where user not found
@@ -222,13 +214,16 @@ const user = await User.findById(req.user._id);
     .status(200)
     .json(new ApiResponse(200, {}, "Password changed successfully"));
 });
-///
+
+// user getCurrent details 
 const getCurrentUser = asyncHandler(async (req, res) => {
     return res
       .status(200)
       .json(new ApiResponse(200, req.user, "User fetched successfully"));
   });
-  
+
+// Forgot password
+  // --  work on that
 
 export {
   registerUser,

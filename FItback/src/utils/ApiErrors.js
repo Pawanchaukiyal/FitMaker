@@ -1,7 +1,8 @@
 
+// All the Api Error handle here 
 
-
-class ApiError extends Error {//t inherits from the built-in Error class, which provides basic error handling functionalities in JavaScript.
+//it inherits from the built-in Error class, which provides basic error handling functionalities in JavaScript.
+class ApiError extends Error {
     constructor(
       statusCode,
       message = "Something went wrong",

@@ -1,15 +1,16 @@
-//this is a main file where server runs 
+//This is a main file where server runs 
+
 import connectDB from './db/indexdb.js';
 import dotenv from "dotenv"; 
 import { app } from './app.js';
-// const app = express()
 
+// configuration setup
 dotenv.config({
     path: "./.env",
   });
 
-
-connectDB() // piche express kam karega
+// method to connect the db
+connectDB() 
   .then(() => {
     app.listen(process.env.PORT || 3000, () => {
       console.log(`Server is running at port: ${process.env.PORT}`);

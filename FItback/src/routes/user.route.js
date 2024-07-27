@@ -1,3 +1,5 @@
+// This is the route file for the user 
+
 import { Router } from "express";
 import { registerUser,loginUser, logoutUser, refreshAccessToken, changeCurrentPassword, getCurrentUser } from "../controllers/User.Controllers.js";
 
