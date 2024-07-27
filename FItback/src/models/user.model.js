@@ -24,8 +24,8 @@ const userSchema = new Schema(
       trim: true,
       index: true, // to enable searching field
     },
-    Age:{
-    type:String,
+    age:{
+    type:Number,
     required:true,
     },
     gender:{
@@ -59,6 +59,8 @@ userSchema.methods.generateAccessToken = function () {
       email: this.email,
       username: this.username,
       fullName: this.fullName,
+      gender: this.gender,
+      age: this.age,
     },
     process.env.ACCESS_TOKEN_SECRET,
     {
