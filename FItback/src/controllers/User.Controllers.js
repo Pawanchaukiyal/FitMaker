@@ -21,25 +21,31 @@ const generateAccessAndRefereshTokens = async (userId) => {
   }
 };
 
-//user registration endpoint
 const registerUser = asyncHandler(async (req, res) => {
-  const { fullName, email, username, password, gender, age } = req.body;
-  //check field is empty or not
-  if (
-    [fullName, email, username, password, gender, age].some(
-      (field) => typeof field === "string" && field.trim() === ""
-    )
-  ) {
+  const { fullName, email, username, password, gender, age, role } = req.body;
+
+  console.log('Request Body:', req.body); // Add debugging log
+
+  // Check if all required fields are present
+  if (!fullName || !email || !username || !password || !gender || !age) {
     throw new ApiError(400, "All fields are required");
   }
-  // check user already exist or not
+
+  // Check if username is a string and not empty
+  if (typeof username !== "string" || username.trim() === "") {
+    throw new ApiError(400, "Username is required");
+  }
+
+  // Check if user already exists
   const existedUser = await User.findOne({
-    $or: [{ username }, { email }],
+    $or: [{ username: username.toLowerCase() }, { email }],
   });
+
   if (existedUser) {
     throw new ApiError(409, "User with email or username already exists");
   }
-  // create entry in db
+
+  // Create entry in DB
   const user = await User.create({
     fullName,
     email,
@@ -47,16 +53,15 @@ const registerUser = asyncHandler(async (req, res) => {
     username: username.toLowerCase(),
     age,
     gender,
+    role: role || 'user', // Default to 'user' role if not provided
   });
-  //
-  const createdUser = await User.findById(user._id).select(
-    "-password -refreshToken" // passwor and refresh token not check
-  );
-  // check creater user aaya ya nhi
+
+  const createdUser = await User.findById(user._id).select("-password -refreshToken");
   if (!createdUser) {
-    throw new ApiError(500, "Something went wrong while registring the user");
+    throw new ApiError(500, "Something went wrong while registering the user");
   }
-  // return respone
+
+  // Return response
   return res
     .status(201)
     .json(new ApiResponse(200, createdUser, "User registered successfully"));

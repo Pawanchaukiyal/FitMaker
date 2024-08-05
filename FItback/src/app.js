@@ -4,6 +4,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import userRouter from "./routes/user.route.js";
 import excerciseRouter from "./routes/excercise.route.js";
+import blogroute from "./routes/blog.route.js"
 
 const app = express();
 
@@ -29,6 +30,8 @@ app.use(cookieParser());
 // 1. user route path
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/exercises", excerciseRouter);
+app.use("/api/v1/blogs",blogroute );
+
 
 // 2. exercise route path
 

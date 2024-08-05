@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+
 const userSchema = new Schema(
   {
     username: {
@@ -24,14 +25,14 @@ const userSchema = new Schema(
       trim: true,
       index: true, // to enable searching field
     },
-    age:{
-    type:Number,
-    required:true,
+    age: {
+      type: Number,
+      required: true,
     },
-    gender:{
-    type:String,
-    required:true,
-    enum:['Male','Female','Other']
+    gender: {
+      type: String,
+      required: true,
+      enum: ['Male', 'Female', 'Other']
     },
     password: {
       type: String,
@@ -40,18 +41,26 @@ const userSchema = new Schema(
     refreshToken: {
       type: String,
     },
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
+    },
   },
   { timestamps: true }
 );
+
 // read in mongodoc middleware
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next(); // if password not modified next execute else down line execute
   this.password = await bcrypt.hash(this.password, 10);
   next();
 });
+
 userSchema.methods.isPasswordCorrect = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
+
 userSchema.methods.generateAccessToken = function () {
   return jwt.sign(
     {
@@ -61,6 +70,7 @@ userSchema.methods.generateAccessToken = function () {
       fullName: this.fullName,
       gender: this.gender,
       age: this.age,
+      role: this.role,
     },
     process.env.ACCESS_TOKEN_SECRET,
     {
@@ -80,4 +90,5 @@ userSchema.methods.generateRefreshToken = function () {
     }
   );
 };
+
 export const User = mongoose.model("User", userSchema);

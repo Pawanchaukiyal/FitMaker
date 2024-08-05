@@ -12,17 +12,21 @@ const exerciseSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
-  targeted_area: {
-    type: String,
+  aot: {
+    type: [String],
     required: true,
     trim: true
   },
-  gif: {
+  exerciseImage: {
     type: String,
-    required: true,
-    trim: true
+    url: String,
   },
   category: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  type: {
     type: String,
     required: true,
     trim: true
