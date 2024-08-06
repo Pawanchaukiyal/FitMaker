@@ -5,14 +5,14 @@ import cookieParser from "cookie-parser";
 import userRouter from "./routes/user.route.js";
 import excerciseRouter from "./routes/excercise.route.js";
 import blogroute from "./routes/blog.route.js"
+import { corsOptions } from "./controllers/connection.config.js";
 
 const app = express();
 
 // setup to access the permission of the cors
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN,
-    credentials: true,
+    origin: corsOptions
   })
 );
 
