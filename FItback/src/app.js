@@ -5,6 +5,7 @@ import userRouter from "./routes/user.route.js";
 import excerciseRouter from "./routes/excercise.route.js";
 import blogroute from "./routes/blog.route.js";
 import { corsOptions } from "./config/config.js";
+import yogaRouter from "./routes/yoga.route.js"
 
 const app = express();
 
@@ -23,5 +24,6 @@ app.use(cookieParser());
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/exercises", excerciseRouter);
 app.use("/api/v1/blogs", blogroute);
+app.use("/api/v1/yoga", yogaRouter);
 
 export { app };
