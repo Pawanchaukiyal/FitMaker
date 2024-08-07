@@ -1,41 +1,27 @@
-//This file use express middlewares
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import userRouter from "./routes/user.route.js";
 import excerciseRouter from "./routes/excercise.route.js";
-import blogroute from "./routes/blog.route.js"
-import { corsOptions } from "./controllers/connection.config.js";
+import blogroute from "./routes/blog.route.js";
+import { corsOptions } from "./config/config.js";
 
 const app = express();
 
 // setup to access the permission of the cors
-app.use(
-  cors({
-    origin: corsOptions
-  })
-);
+app.use(cors(corsOptions));
 
 // configuration
 app.use(express.json({ limit: "30kb" }));
-// extended means you can nested objects
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
-// static -- some time we store file folders and asset store in public
 app.use(express.static("public"));
 
 // To acess and set the user server cookies.
 app.use(cookieParser());
 
 //routes path define
-// 1. user route path
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/exercises", excerciseRouter);
-app.use("/api/v1/blogs",blogroute );
+app.use("/api/v1/blogs", blogroute);
 
-
-// 2. exercise route path
-
-//3. yoga route path
-
-//4. Admin route path
 export { app };

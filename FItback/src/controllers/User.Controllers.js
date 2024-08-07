@@ -69,15 +69,15 @@ const registerUser = asyncHandler(async (req, res) => {
 
 //user login apiendpoint
 const loginUser = asyncHandler(async (req, res) => {
-  const { email, username, password } = req.body;
-  console.log(email);
+  const { email, password } = req.body;
 
-  if (!username && !email && !password) {
-    throw new ApiError(400, "username or email and password is required");
+
+  if ( !email && !password) {
+    throw new ApiError(400, " email and password is required");
   }
 
   const user = await User.findOne({
-    $or: [{ username }, { email }],
+    $or: [{ email }],
   });
 
   if (!user) {
@@ -102,7 +102,7 @@ const loginUser = asyncHandler(async (req, res) => {
     httpOnly: true,
     secure: true,
   };
-
+  console.log(email);
   return res
     .status(200)
     .cookie("accessToken", accessToken, options)
@@ -138,7 +138,7 @@ const logoutUser = asyncHandler(async (req, res) => {
     httpOnly: true,
     secure: true,
   };
-
+  console.log("logout");
   return res
     .status(200)
     .clearCookie("accessToken", options)
