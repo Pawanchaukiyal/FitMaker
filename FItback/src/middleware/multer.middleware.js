@@ -1,12 +1,21 @@
-import multer from "multer";
+import multer from 'multer';
+import path from 'path';
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "./public/temp");
+    cb(null, path.join(__dirname, '../public/temp'));
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname);
   },
 });
 
-export const upload = multer({ storage });
+const fileFilter = (req, file, cb) => {
+  // Accept images only
+  if (!file.mimetype.startsWith('image/')) {
+    return cb(new Error('Invalid file type'), false);
+  }
+  cb(null, true);
+};
+
+export const upload = multer({ storage, fileFilter });
