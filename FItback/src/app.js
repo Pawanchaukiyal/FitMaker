@@ -5,7 +5,7 @@ import userRouter from "./routes/user.route.js";
 import excerciseRouter from "./routes/excercise.route.js";
 import blogroute from "./routes/blog.route.js";
 import { corsOptions } from "./config/config.js";
-import yogaRouter from "./routes/yoga.route.js"
+import yogaRouter from "./routes/yoga.route.js";
 
 const app = express();
 
@@ -16,12 +16,11 @@ app.use(cors(corsOptions));
 //     console.log('Incoming request:', req.body, req.file);
 //     next();
 //   });
-  
 
 // configuration
 app.use(express.json({ limit: "30kb" }));
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
-app.use(express.static('public'));
+app.use(express.static("public"));
 
 // To acess and set the user server cookies.
 app.use(cookieParser());
